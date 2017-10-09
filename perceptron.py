@@ -17,7 +17,8 @@ from sklearn.linear_model import Perceptron
 #we need to add 1 to X values (we can say its bias)
 X1 = np.c_[np.ones((X.shape[0])),X]
 
-plt.scatter(X1[:,1],X1[:,2],marker='o',c=y)
+plt.scatter(X1[:,1],X1[:,2],marker='*',c=y)
+
 
 
 clf = Perceptron()
@@ -35,4 +36,6 @@ y_axis = np.linspace(y_min,y_max)
 
 Y = w0+w1*x_axis+w2*y_axis
 plt.plot(x_axis,Y)
+plt.ylim(y_min-1,y_max+1)
+plt.legend()
 plt.show()
