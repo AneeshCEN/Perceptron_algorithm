@@ -34,7 +34,7 @@ y_max = max(X[:,1])
 x_axis = np.linspace(x_min,x_max)
 y_axis = np.linspace(y_min,y_max)
 
-Y = w0+w1*x_axis+w2*y_axis
+Y = -(w0+w1*x_axis)/w2
 plt.plot(x_axis,Y)
 plt.ylim(y_min-1,y_max+1)
 plt.legend()
