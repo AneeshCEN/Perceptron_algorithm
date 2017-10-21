@@ -11,6 +11,9 @@ import numpy as np
 from sklearn.linear_model import Perceptron
 np.random.seed(6)
 
+
+
+
 def hypothesis_prediction(W,X):
     prediction = np.dot(W,X)
     if prediction>=0:
@@ -19,20 +22,28 @@ def hypothesis_prediction(W,X):
         return -1
 
 
+def update_weights(weights, X, y):
+    for x,y in zip(X,y):
+        predicted_label = hypothesis_prediction(weights, x)
+        error = eta*(y-predicted_label)
+        delta_w =  error *x
+        weights = weights+delta_w
+    return weights
 
 
 if __name__ == "__main__":
     
     #number of iteration 
     num_iter = 500
-    
+   
+    #Learning rate
     eta = 0.01
     
     iris = datasets.load_iris()
     X = iris.data[:, :2]  # we only take the first two features.
     y = iris.target
-    plt.scatter(X[:50,0],X[:50,1], c='r',label='class 1')
-    plt.scatter(X[50:100,0],X[50:100,1], c='b',label='class 2')
+    plt.scatter(X[:50,0],X[:50,1], c='r',label='class 1 (Labels -1)')
+    plt.scatter(X[50:100,0],X[50:100,1], c='b',label='class 2 (Labels +1)')
     plt.title('Linearly separable')
     plt.xlabel('X - axis')
     plt.ylabel('Y - axis')
@@ -41,7 +52,7 @@ if __name__ == "__main__":
     
     training_data = X[:100,:]
     
-    # Appending feature vector of ones
+    # Appending feature vector of ones to hold for bias term
     X = np.c_[np.ones(training_data.shape[0]), training_data]
     y = y[:100,]
     
@@ -50,20 +61,13 @@ if __name__ == "__main__":
     
     # initialize the weight vector
     weights = np.zeros(X.shape[1])
-    
-    def pass_to(weights, X, y):
-        for x,y in zip(X,y):
-            predicted_label = hypothesis_prediction(weights, x)
-            error = eta*(y-predicted_label)
-            delta_w =  error *x
-            weights = weights+delta_w
-        return weights
-            
-        
+                
+    # update weights in each iteration  
     for i in range(num_iter):
-        weights = pass_to(weights, X, y)
+        weights = update_weights(weights, X, y)
         weights = weights
         
+    # Using scikit learn library 
     clf = Perceptron()
     clf.fit(X,y)
     w0,w1,w2 = clf.coef_[0]
@@ -79,10 +83,10 @@ if __name__ == "__main__":
         
     Y = -(weights[0]+weights[1]*x_axis)/weights[2]
     Y2 = -(w0+w1*x_axis)/w2
-    plt.plot(x_axis,Y)
-    plt.plot(x_axis,Y2, c='r')
+    plt.plot(x_axis,Y,c='black')
+    plt.plot(x_axis,Y2, c='g')
     plt.ylim(y_min-1,y_max+1)
-    plt.legend()
+    plt.legend(loc='best')
     plt.show()
 
     
